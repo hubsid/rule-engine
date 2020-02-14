@@ -17,8 +17,15 @@ public class ConditionNode<F, V, R> {
         this.operator = operator;
         this.rhs = rhs;
     }
+    public boolean test(F fact) {
+        try {
+            return testInternal(fact);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public boolean test(F fact) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    private boolean testInternal(F fact) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method = fact.getClass().getMethod(methodname);
         Object lhs = method.invoke(fact);
 

@@ -8,13 +8,12 @@ import java.util.List;
 public class InsurerSelector implements IRuleExecutor<Director, InsurerSelectionDT, Void> {
 
     @Override
-    public void init(List<InsurerSelectionDT> decisionTable) {
+    public void init(Class<Director> factClass, List<InsurerSelectionDT> decisionTable) {
 
     }
 
-    public Void execute(Director director, InsurerSelectionDT decisionTable) {
-
-        director.setInsurer(decisionTable.getInsurer());
+    @Override
+    public Void execute(Director fact) {
         return null;
     }
 }

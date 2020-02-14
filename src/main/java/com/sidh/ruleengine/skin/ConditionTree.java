@@ -27,5 +27,15 @@ public class ConditionTree <F, R>{
         return conditionNode;
     }
 
-
+    public R execute(F fact) {
+        List<ConditionNode<F, R, ?>> nodeList = headNodes;
+        do {
+            Optional<ConditionNode<F, R, ?>> matchingNode = headNodes.stream().filter(n -> n.test(fact)).findFirst();
+            if(matchingNode.isPresent()) {
+                nodeList = matchingNode.get().getChildNodes();
+            }
+            else
+                return null;
+        }
+    }
 }
