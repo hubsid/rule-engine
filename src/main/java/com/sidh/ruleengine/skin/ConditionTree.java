@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ConditionTree <F, R, V>{
+public class ConditionTree<F, R> {
     private List<ConditionNode<F, R, ?>> headNodes;
     private String firstLhs;
 
@@ -14,8 +14,8 @@ public class ConditionTree <F, R, V>{
         headNodes = new ArrayList<>();
     }
 
-    public ConditionNode<F, R, ?>  addNode(ConditionNode<F, R, ?> conditionNode) {
-        if(headNodes.isEmpty())
+    public ConditionNode<F, R, ?> addNode(ConditionNode<F, R, ?> conditionNode) {
+        if (headNodes.isEmpty())
             headNodes.add(conditionNode);
         else {
             Optional<ConditionNode<F, R, ?>> matchingNode = headNodes.stream().filter(node -> node.equals(conditionNode)).findFirst();
@@ -28,14 +28,18 @@ public class ConditionTree <F, R, V>{
     }
 
     public R execute(F fact) {
-        List<ConditionNode<F, R>> nodeList = headNodes;
+        List<? extends ConditionNode<F, R, ?>> nodeList = headNodes;
+        Optional<ConditionNode<F, R, ?>> matchingNode;
         do {
-            Optional<ConditionNode<F, R, ?>> matchingNode = headNodes.stream().filter(n -> n.test(fact)).findFirst();
-            if(matchingNode.isPresent()) {
+            matchingNode = headNodes.stream().filter(n -> n.test(fact)).findFirst();
+            if (matchingNode.isPresent()) {
+                if(matchingNode.get() instanceof ConditionLeafNode)
+                    return ((ConditionLeafNode<F, R, ?>)matchingNode.get()).execute(fact);
                 nodeList = matchingNode.get().getChildNodes();
-            }
-            else
+            } else
                 return null;
-        }
+        } while (nodeList != null && !nodeList.isEmpty());
+
+        return null;
     }
 }
