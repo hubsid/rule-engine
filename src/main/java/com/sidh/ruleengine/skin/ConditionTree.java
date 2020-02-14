@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ConditionTree <F, R>{
+public class ConditionTree <F, R, V>{
     private List<ConditionNode<F, R, ?>> headNodes;
     private String firstLhs;
 
@@ -28,7 +28,7 @@ public class ConditionTree <F, R>{
     }
 
     public R execute(F fact) {
-        List<ConditionNode<F, R, ?>> nodeList = headNodes;
+        List<ConditionNode<F, R>> nodeList = headNodes;
         do {
             Optional<ConditionNode<F, R, ?>> matchingNode = headNodes.stream().filter(n -> n.test(fact)).findFirst();
             if(matchingNode.isPresent()) {

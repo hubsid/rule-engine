@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ConditionNode<F, V, R> {
+public class ConditionNode<F, R, V> {
     private String methodname;
     private Operator operator;
     private V rhs;
